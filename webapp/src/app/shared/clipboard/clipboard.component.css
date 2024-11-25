@@ -1,0 +1,17 @@
+
+
+.copy-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.copy-container input {
+  width: 200px;
+  padding: 5px;
+  margin-right: 5px;
+}
+
+.copy-container button {
+  padding: 5px 10px;
+}

@@ -1,0 +1,5 @@
+<div class="copy-container">
+  <input type="text" [value]="textToCopy" readonly class="copy-input" />
+  <button (click)="copyToClipboard()">Copy</button>
+</div>
+<p *ngIf="copied" class="success-message">Text copied to clipboard!</p>

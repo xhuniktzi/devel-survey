@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="actions">
+    <button (click)="navigateToCreate()">Create New Survey</button>
+    <button (click)="navigateToResponses()">Responses</button>
+    <button (click)="logout()">Logout</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Created By</th>
+        <th>Updated By</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let survey of surveys">
+        <td>{{ survey.name }}</td>
+        <td>{{ survey.description }}</td>
+        <td>{{ survey.createdBy }}</td>
+        <td>{{ survey.updatedBy }}</td>
+        <td>{{ survey.createdAt }}</td>
+        <td>{{ survey.updatedAt }}</td>
+        <td>
+          <div class="actions">
+            <button (click)="navigateToEdit(survey.surveyIdentifier)">Edit</button>
+            <button (click)="deleteSurvey(survey.surveyIdentifier)">Delete</button>
+            <app-clipboard [textToCopy]="'http://localhost:4200/public/' + survey.surveyIdentifier"></app-clipboard>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

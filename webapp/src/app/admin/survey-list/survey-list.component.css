@@ -1,0 +1,20 @@
+
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 8px 12px;
+}
+
+table th,
+table td {
+  vertical-align: middle;
+}
+
+.copy-input {
+  width: 200px;
+  margin-right: 10px;
+}

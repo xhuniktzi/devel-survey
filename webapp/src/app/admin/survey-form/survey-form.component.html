@@ -1,0 +1,55 @@
+<div class="container">
+    <div class="form-header">
+        <h2>{{ isEditMode ? 'Edit Survey' : 'Create Survey' }}</h2>
+        <button (click)="back()">Back to list</button>
+    </div>
+
+    <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
+        <div>
+            <label>Name:</label>
+            <input formControlName="name" />
+        </div>
+
+        <div>
+            <label>Description:</label>
+            <textarea formControlName="description"></textarea>
+        </div>
+
+        <div formArrayName="fields">
+            <div *ngFor="let field of fields.controls; let i = index" [formGroupName]="i" class="field-group">
+                <h3>Field {{ i + 1 }}</h3>
+
+                <label>Name:</label>
+                <input formControlName="name" />
+
+                <label>Type:</label>
+                <select formControlName="typeId" (change)="onTypeChange($event, i)">
+                    <option [value]="1">Number</option>
+                    <option [value]="2">Text</option>
+                    <option [value]="3">Date</option>
+                    <option [value]="4">Multiple Choice</option>
+                    <option [value]="5">Single Choice</option>
+                </select>
+
+                <label>Required:</label>
+                <input type="checkbox" formControlName="isRequired" />
+
+                <div *ngIf="field.get('typeId')?.value === 4 || field.get('typeId')?.value === 5" class="field-options">
+                    <h4>Options:</h4>
+                    <div formArrayName="options">
+                        <div *ngFor="let option of asFormArray(field.get('options')).controls; let j = index">
+                            <input [formControlName]="j" />
+                            <button type="button" (click)="removeOption(i, j)">Remove Option</button>
+                        </div>
+                    </div>
+                    <button type="button" (click)="addOption(i)">Add Option</button>
+                </div>
+
+                <button type="button" (click)="removeField(i)">Remove Field</button>
+            </div>
+        </div>
+
+        <button type="button" (click)="addField()">Add Field</button>
+        <button type="submit">Save Survey</button>
+    </form>
+</div>

@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+   seed = "ts-node ./seed.ts" 
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  username String   @unique
+  password String
+  surveys  Survey[] @relation("SurveyUser")
+}
+
+model Survey {
+  id               Int        @id @default(autoincrement()) 
+  surveyIdentifier Int        
+  name             String
+  description      String
+  version          Int        @default(1) 
+  isActive         Boolean    @default(true) 
+  userId           Int        
+  timestamp        DateTime   @default(now()) 
+  fields           Field[]
+  responses        Response[]
+  user             User       @relation("SurveyUser", fields: [userId], references: [id])
+
+  @@unique([surveyIdentifier, version]) 
+}
+
+model Field {
+  id         Int            @id @default(autoincrement())
+  surveyId   Int
+  name       String
+  typeId     Int
+  isRequired Boolean
+  timestamp  DateTime       @default(now())
+  survey     Survey         @relation(fields: [surveyId], references: [id])
+  type       FieldType      @relation(fields: [typeId], references: [id])
+  answers    Answer[]
+  options    FieldOption[]  
+}
+
+
+model FieldType {
+  id     Int      @id @default(autoincrement())
+  name   String   @unique
+  fields Field[]
+}
+
+model Response {
+  id        Int        @id @default(autoincrement())
+  surveyId  Int
+  createdAt DateTime   @default(now())
+  answers   Answer[]
+  survey    Survey     @relation(fields: [surveyId], references: [id])
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  responseId Int
+  fieldId    Int
+  value      String
+  response   Response @relation(fields: [responseId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  field      Field    @relation(fields: [fieldId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+}
+
+model FieldOption {
+  id       Int    @id @default(autoincrement())
+  fieldId  Int
+  value    String
+  field    Field  @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  @@index([fieldId])
+}
+

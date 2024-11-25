@@ -1,0 +1,35 @@
+<div class="survey-container" *ngIf="survey">
+  <h2>{{ survey.name }}</h2>
+  <p>{{ survey.description }}</p>
+
+  <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
+    <div *ngFor="let field of survey.fields" class="field-group">
+      
+      <div *ngIf="field.typeId === 1 || field.typeId === 2 || field.typeId === 3">
+        <label>{{ field.name }}</label>
+        <input [type]="getFieldType(field.typeId)" [formControlName]="field.id.toString()" />
+      </div>
+
+      
+      <div *ngIf="field.typeId === 4">
+        <label>{{ field.name }}</label>
+        <div *ngFor="let option of field.options">
+          <input type="checkbox" (change)="onCheckboxChange($event, field.id)" [value]="option.value" />
+          {{ option.value }}
+        </div>
+      </div>
+
+      
+      <div *ngIf="field.typeId === 5">
+        <label>{{ field.name }}</label>
+        <div *ngFor="let option of field.options">
+          <input type="radio" [formControlName]="field.id.toString()" [value]="option.value"
+            [attr.name]="field.id.toString()" />
+          {{ option.value }}
+        </div>
+      </div>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>

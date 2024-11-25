@@ -1,0 +1,33 @@
+<div class="response-container">
+  <div class="header">
+    <h2>Survey Responses</h2>
+    <button (click)="backToList()">Back to List</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Survey Name</th>
+        <th>Response Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let response of responses">
+        <td>{{ response.survey.name }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let answer of response.answers">
+              {{ answer.field.name }}: {{ answer.value }}
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+  </div>
+</div>
